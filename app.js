@@ -1,4 +1,6 @@
+//listen events on buttons
 document.getElementById("button1").addEventListener("click", loadCustomer);
+document.getElementById("button2").addEventListener("click", loadCustomers);
 
 function loadCustomer(event) {
   //create a new request instance
@@ -28,4 +30,34 @@ function loadCustomer(event) {
   };
   //state 4 = ready to go!
   xhr.send();
+}
+function loadCustomers(event) {
+  //create a xhr instance
+  const xhr = new XMLHttpRequest();
+  //GET request, to customers.json, async
+  xhr.open("GET", "customers.json", true);
+  //when response arrive
+  xhr.onload = function () {
+    //if response is okay
+    if (this.status === 200) {
+      //create customers array
+      //since response is string, convert them to object
+      const customers = JSON.parse(this.responseText);
+      console.log(customers);
+      let bigOutPut;
+      customers.forEach(function (customer) {
+        const output = `
+        <ul>
+        <li>ID:${customer.id}</li>
+        <li>Name:${customer.name}</li>
+        <li>Company:${customer.company}</li>
+        <li>Phone:${customer.phone}</li>
+        </ul>
+        `;
+        bigOutPut += output;
+      });
+      document.getElementById("customers").innerHTML = bigOutPut;
+    }
+  };
+  xhr.send(); // send the f**ing request
 }
